@@ -281,7 +281,7 @@ const poissonLambda = createParameter(
   [0.1, 10],
   true,
   1,
-  'continuous',
+  'discrete',
   null,
   'rate'
 );
@@ -592,7 +592,7 @@ const poissonRate: DistributionParametrization = {
   name: 'rate',
   params: [poissonLambda],
   density: (x: number, lambda: number) => Poisson.pdf(x, lambda),
-  densityDisplay: '\\frac{\\lambda^x}{x!} \\exp\\left\\{-\\lambda\\right\\}',
+  densityDisplay: '\\frac{\\lambda^x}{x!} e^{-\\lambda}',
   cdf: (x: number, lambda: number) => Poisson.cdf(x, lambda),
   limits: [0, Infinity],
   interactLimits: (lambda: number) => [0, 25],

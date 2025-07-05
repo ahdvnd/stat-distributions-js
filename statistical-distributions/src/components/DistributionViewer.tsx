@@ -9,12 +9,14 @@ interface DistributionViewerProps {
   distribution: Distribution;
   parametrizationIndex: number;
   onParametrizationChange: (index: number) => void;
+  compact?: boolean;
 }
 
 const DistributionViewer: React.FC<DistributionViewerProps> = ({
   distribution,
   parametrizationIndex,
   onParametrizationChange,
+  compact = false,
 }) => {
   const [plotType, setPlotType] = useState<'pdf' | 'cdf'>('pdf');
   const [parameterValues, setParameterValues] = useState<number[]>([]);
@@ -86,22 +88,11 @@ const DistributionViewer: React.FC<DistributionViewerProps> = ({
       </div>
 
       {/* Plot and Controls */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Plot */}
-        <div className="lg:col-span-2">
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <DistributionPlot
-              parametrization={currentParametrization}
-              parameterValues={parameterValues}
-              plotType={plotType}
-            />
-          </div>
-        </div>
-
-        {/* Controls */}
-        <div className="lg:col-span-1">
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+      {compact ? (
+        <div className="space-y-4">
+          {/* Controls on top */}
+          <div className="bg-white rounded-lg shadow-lg p-4">
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">
               Parameters
             </h3>
             <ParameterControls
@@ -110,8 +101,44 @@ const DistributionViewer: React.FC<DistributionViewerProps> = ({
               onChange={handleParameterChange}
             />
           </div>
+
+          {/* Plot below */}
+          <div className="bg-white rounded-lg shadow-lg p-4">
+            <DistributionPlot
+              parametrization={currentParametrization}
+              parameterValues={parameterValues}
+              plotType={plotType}
+            />
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Plot */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <DistributionPlot
+                parametrization={currentParametrization}
+                parameterValues={parameterValues}
+                plotType={plotType}
+              />
+            </div>
+          </div>
+
+          {/* Controls */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Parameters
+              </h3>
+              <ParameterControls
+                parameters={currentParametrization.params}
+                values={parameterValues}
+                onChange={handleParameterChange}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Distribution Info */}
       <DistributionInfo
